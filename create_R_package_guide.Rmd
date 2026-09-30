@@ -1,0 +1,69 @@
+---
+title: "Creating your own R package"
+author: "Martin Law"
+date: "2026-09-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE, eval=FALSE}
+rmarkdown::render("create_R_package_guide.Rmd", output_format = "word_document")
+```
+
+
+# Prerequisites
+
+Assumption: you use github in your day-to-day workflow. Easiest approach:
+
+ - Create repo on github
+ - New project using this github repo
+ 
+See [Happy git with R](https://happygitwithr.com/new-github-first.html) for more details
+
+# Turn existing project into a package
+
+```{r, eval=FALSE}
+install.packages("librarian")
+librarian::shelf(devtools, usethis, roxygen2, here)
+```
+
+ - `usethis::create_package(here())` -- turns project into a package
+ - Copy any existing functions into `R/`
+ - `devtools::load_all()` -- attaches your package (like `library`) 
+ - Make edits to your functions, like specifying imported packages within code
+ - `devtools::use_mit_license()` -- add MIT licence document (other licences are available)
+ - Edit DESCRIPTION file -- your name, email address, etc.
+ - `usethis::use_package("otherpkg")` if your your package uses another package 
+ - Insert Roxygen skeleton (Alt+Ctrl+Shift+R) -- creates templates for help pages
+ - Fill out templates for help pages
+ - `devtools::document()` or `roxygen2::roxygenise()` -- creates the actual help page files
+ - Optional: `usethis::use_readme_rmd()` -- creates a template README R  Markdown file
+ - Optional: `usethis::build_readme()` -- renders the R Markdown file, creating the README.md file
+ - `devtools::check()` -- builds the package and checks for problems
+ - `devtools::install()` -- installs the package proper
+ 
+
+# Make the package available via github
+
+ - Commit
+ - Push
+ - Users can then install by running `remotes::install_github("username/pkgname")`
+
+
+# Update your package in future
+
+ - `devtools::load_all()` -- attaches your package as before
+ - Make edits
+ - `devtools::check()` 
+ - Commit changes
+ - `usethis::use_version()` -- update the version number
+ - Push
+ - On github, create a new Release, using the new version number
+ 
+# Next steps
+
+ - Create tests, to verify your functions work as intended
+ - Create vignettes, to explain how your functions work in more detail
